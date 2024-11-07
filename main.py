@@ -1,24 +1,26 @@
 from svector import SVector2 as Vector
 from scircles import PhysicWorld as World
-from scircles import SCircle as Circle
+from sparticles import Particle as Particle
 from time import sleep
 import pygame
 from pygame.locals import Rect
 from math import sin, cos, pi
-from random import random
+from random import random, randint
 
 pygame.init()
-H = 1000
-W = 1500
+
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+#screen = pygame.display.set_mode((800, 600))
+W, H = screen.get_size()
 SCALE = 40
-screen = pygame.display.set_mode([W, H])
 world = World(W, H, SCALE)
 
 min_vel = 50
 max_vel = 100
 min_size = 5
 max_size = 20
-n_objs = 1000
+obj_density = 0.0002
+n_objs = int(W * H * obj_density)
 
 objects = []
 for i in range(n_objs):
@@ -31,7 +33,8 @@ for i in range(n_objs):
     maxx = W - radius
     maxy = H - radius
     newpos = Vector(minx+random()*(maxx-minx), miny+random()*(maxy-miny))
-    obj = Circle(world, newpos, radius, pi * radius ** 2)
+    color = [randint(25, 255), randint(25, 255), randint(25, 255)]
+    obj = Particle(world, newpos, radius, pi * radius ** 2, "", "", color)
     obj.velocity = velocity
     objects.append(obj)
 
@@ -48,11 +51,11 @@ def draw_grid():
             ey = world.H - y * world.scale
             pygame.draw.rect(screen, color, Rect(sx, sy, ex-sx, ey-sy))
 
-def draw_object(obj : Circle):
+def draw_object(particle : Particle):
     global screen, W
-    mopos = obj.position.as_list()
+    mopos = particle.position.as_list()
     mopos[1] = H - mopos[1]
-    pygame.draw.circle(screen, [255, 255, 255], mopos, obj.radius)
+    pygame.draw.circle(screen, particle.color, mopos, particle.radius)
 
 screen.fill([0, 0, 0])
 pygame.display.flip()
@@ -64,6 +67,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                running = False
     world.simulate(delta)
     #draw_grid()
     screen.fill([0, 0, 0])
