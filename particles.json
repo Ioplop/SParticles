@@ -1,0 +1,92 @@
+{
+    "particles":[
+        {
+            "name": "energy",
+            "symbol": "En",
+            "mass": 0,
+            "radius": 5,
+            "color": [255, 255, 255]
+        },
+        {
+            "name": "red",
+            "symbol": "Re",
+            "mass": 1,
+            "radius": 10,
+            "color": [255, 0, 0]
+        },
+        {
+            "name": "green",
+            "symbol": "Gr",
+            "mass": 1,
+            "radius": 10,
+            "color": [0, 255, 0]
+        },
+        {
+            "name": "blue",
+            "symbol": "Bl",
+            "mass": 1,
+            "radius": 10,
+            "color": [0, 0, 255]
+        },
+        {
+            "name": "yellow",
+            "symbol": "Ye",
+            "mass": 2,
+            "radius": 14,
+            "color": [255, 255, 0]
+        },
+        {
+            "name": "magenta",
+            "symbol": "Ma",
+            "mass": 2,
+            "radius": 14,
+            "color": [255, 0, 255]
+        },
+        {
+            "name": "cyan",
+            "symbol": "Cy",
+            "mass": 2,
+            "radius": 14,
+            "color": [0, 255, 255]
+        },
+        {
+            "name": "white",
+            "symbol": "Wh",
+            "mass": 3,
+            "radius": 17,
+            "color": [240, 240, 240]
+        }
+    ],
+    "reactions":[
+        {
+            "reactives": ["Re", "Gr"],
+            "product": "Ye",
+            "energy": 10
+        },
+        {
+            "reactives": ["Re", "Bl"],
+            "product": "Ma",
+            "energy": 10
+        },
+        {
+            "reactives": ["Bl", "Gr"],
+            "product": "Cy",
+            "energy": 10
+        },
+        {
+            "reactives": ["Re", "Cy"],
+            "product": "Wh",
+            "energy": 10
+        },
+        {
+            "reactives": ["Gr", "Ma"],
+            "product": "wh",
+            "energy": 10
+        },
+        {
+            "reactives": ["Bl", "Ye"],
+            "product": "Wh",
+            "energy": 10
+        }
+    ]
+}
