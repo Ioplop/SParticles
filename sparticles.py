@@ -15,7 +15,3 @@ class Particle(WObject):
         
     def collide(self, other : Particle):
         super().collide(other)
-
-def scan_particle_dict():
-    # TODO: Scan particle csv file
-    pass
