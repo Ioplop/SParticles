@@ -21,6 +21,7 @@ min_size = 5
 max_size = 20
 obj_density = 0.0002
 n_objs = int(W * H * obj_density)
+background_color = [0, 0, 15]
 
 objects = []
 for i in range(n_objs):
@@ -57,7 +58,7 @@ def draw_object(particle : Particle):
     mopos[1] = H - mopos[1]
     pygame.draw.circle(screen, particle.color, mopos, particle.radius)
 
-screen.fill([0, 0, 0])
+screen.fill(background_color)
 pygame.display.flip()
 
 t = 0
@@ -72,7 +73,7 @@ while running:
                 running = False
     world.simulate(delta)
     #draw_grid()
-    screen.fill([0, 0, 0])
+    screen.fill(background_color)
     for object in world.objects:
         draw_object(object)
     pygame.display.flip()

@@ -1,0 +1,10 @@
+Name;Symbol;Mass;Radius;R;G;B
+energy;E;0;5;255;255;200
+red;Re;1;10;200;0;0
+green;Gr;1;10;0;200;0
+blue;Bl;1;10;0;0;200
+yellow;Ye;2;14;200;200;0
+magenta;Ma;2;14;200;0;200
+cyan;Cy;2;14;0;200;200
+white;Wh;3;17;200;200;200
+;;;;;;
