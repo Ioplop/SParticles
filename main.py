@@ -29,17 +29,16 @@ objects = []
 for i in range(n_objs):
     angle = random()*pi*2.0
     speed = min_vel + random() * (max_vel - min_vel)
-    radius = min_size + random() * (max_size - min_size)
     velocity = Vector(cos(angle), sin(angle)) * speed
-    minx = radius
-    miny = radius
-    maxx = W - radius
-    maxy = H - radius
+    maxx = W
+    maxy = H
+    minx = 0
+    miny = 0
     newpos = Vector(minx+random()*(maxx-minx), miny+random()*(maxy-miny))
-    color = [randint(25, 255), randint(25, 255), randint(25, 255)]
-    obj = Particle(world, newpos, radius, pi * radius ** 2, "", "", color)
-    obj.velocity = velocity
-    objects.append(obj)
+    symbol = particle_library.random_symbol()
+    part = particle_library.create_particle(symbol, world, newpos)
+    part.velocity = velocity
+    objects.append(part)
 
 def draw_grid():
     global world, screen

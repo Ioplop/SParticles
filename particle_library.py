@@ -1,7 +1,10 @@
 from __future__ import annotations
 from typing import Dict, List
+from random import randint
+
 import pandas as pd
 from pandas import DataFrame as DF
+
 from sparticles import Particle, World
 from svector import SVector2 as Vector
 
@@ -24,6 +27,13 @@ class ParticleBlueprint:
 
 def create_particle(symbol: str, world: World, position: Vector) -> Particle:
     return particle_dict[symbol].gen(world, position)
+
+def random_symbol(exclude_energy: bool = True):
+    symbols = list(particle_dict.keys())
+    s = symbols[randint(0, len(symbols) - 1)]
+    while exclude_energy and s == "E":
+        s = symbols[randint(0, len(symbols) - 1)]
+    return s
 
 def read_particle(row: pd.Series) -> ParticleBlueprint:
     name = row['Name']
