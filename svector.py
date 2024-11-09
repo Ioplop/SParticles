@@ -17,6 +17,9 @@ class SVector2:
     def __mul__(self, other : float) -> SVector2:
         return SVector2(self.x * other, self.y * other)
     
+    def __rmul__(self, other : float) -> SVector2:
+        return self.__mul__(other)
+    
     def __truediv__(self, other : float) -> SVector2:
         return SVector2(self.x / other, self.y / other)
     

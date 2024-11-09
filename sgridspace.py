@@ -49,6 +49,7 @@ class WObject:
         self.position : Vector = position
         self.radius : float = radius
         self.limits : WLimits = None
+        self.dead : bool = False
         world.objects.append(self)
         self.update_grid()
     
@@ -65,8 +66,9 @@ class WObject:
         self.set_position(self.position + movement)
         
     def remove(self):
-        self.world.update_grid(self, WLTransition(self.position, None))
+        self.world.update_grid(self, WLTransition(self.limits, None))
         self.world.objects.remove(self)
+        self.dead = True
         
 class WLimits:
     # Defines the grid limits in which an object lives.

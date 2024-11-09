@@ -1,12 +1,14 @@
-from svector import SVector2 as Vector
-from scircles import PhysicWorld as World
-from sparticles import Particle as Particle
+from random import random, randint
+from math import sin, cos, pi
 from time import sleep
+
 import pygame
 from pygame.locals import Rect
-from math import sin, cos, pi
-from random import random, randint
-import particle_library
+
+import sparticles
+from svector import SVector2 as Vector
+from scircles import PhysicWorld as World
+from sparticles import Particle
 
 pygame.init()
 
@@ -21,11 +23,10 @@ min_vel = 50
 max_vel = 100
 min_size = 5
 max_size = 20
-obj_density = 0.0002
+obj_density = 0.0006
 n_objs = int(W * H * obj_density)
 background_color = [0, 0, 15]
 
-objects = []
 for i in range(n_objs):
     angle = random()*pi*2.0
     speed = min_vel + random() * (max_vel - min_vel)
@@ -35,10 +36,9 @@ for i in range(n_objs):
     minx = 0
     miny = 0
     newpos = Vector(minx+random()*(maxx-minx), miny+random()*(maxy-miny))
-    symbol = particle_library.random_symbol()
-    part = particle_library.create_particle(symbol, world, newpos)
+    symbol = ['Re', 'Gr', 'Bl'][randint(0, 2)]
+    part = sparticles.create_particle(symbol, world, newpos)
     part.velocity = velocity
-    objects.append(part)
 
 def draw_grid():
     global world, screen
