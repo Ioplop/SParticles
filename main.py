@@ -6,11 +6,13 @@ import pygame
 from pygame.locals import Rect
 from math import sin, cos, pi
 from random import random, randint
+import particle_library
 
 pygame.init()
 
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 #screen = pygame.display.set_mode((800, 600))
+
 W, H = screen.get_size()
 SCALE = 40
 world = World(W, H, SCALE)
