@@ -50,7 +50,7 @@ class WObject:
         self.radius : float = radius
         self.limits : WLimits = None
         self.dead : bool = False
-        world.objects.append(self)
+        world.objects.add(self)
         self.update_grid()
     
     def update_grid(self):

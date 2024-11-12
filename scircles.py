@@ -7,7 +7,7 @@ from typing import Set, List
 class PhysicWorld(World):
     def __init__(self, width: float, height: float, scale: float):
         World.__init__(self, width, height, scale)
-        self.objects : Set[SCircle] = []
+        self.objects : Set[SCircle] = set()
     
     def sim_collisions(self):
         for obj in self.objects:
