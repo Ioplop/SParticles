@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Dict
 import math
 from math import cos, sin, asin
 
@@ -59,6 +59,9 @@ class SVector2:
                 raise(Exception(f"Cannot get {item} from an SVector2. Only 0 and 1 are allowed."))
             else:
                 raise(TypeError(f"SVector2 getitem can only take int, not {type(item)}"))
+    
+    def as_dict(self) -> Dict[str, float]:
+        return {"x": self.x, "y": self.y}
     
     def as_list(self) -> List[float, float]:
         return [self.x, self.y]
