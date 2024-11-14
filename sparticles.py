@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Dict
-from random import randint
+from random import randint, random
 
 import pandas as pd
 from pandas import DataFrame as DF
@@ -26,7 +26,7 @@ class Particle(WObject):
         self.stability = stability
         
     def collide(self, other : Particle):
-        if self.dead:
+        if self.dead or other.dead:
             return
         if self.symbol == Particle.energy or other.symbol == Particle.energy:
             return
@@ -47,6 +47,18 @@ class Particle(WObject):
         product.internal_energy = injected_energy
         self.remove()
         other.remove()
+    
+    def split(self):
+        self.dead = True
+        #TODO: Make particle split
+
+    def sim_move(self, delta : float):
+        if self.internal_energy > self.max_energy:
+            if random() > self.stability:
+                self.split()
+        if self.dead:
+            return
+        super().move(delta)
 
 class ParticleBlueprint:
     def __init__(self, name: str, symbol: str, mass: int, radius: int, color: List[int], max_energy: float, stability: float):
