@@ -69,4 +69,12 @@ class SVector2:
     def __str__(self) -> str:
         return f"({self.x}, {self.y})"
 
+    @staticmethod
+    def normal(angle: float) -> SVector2:
+        """Returns a normal vector that points in a given angle in radians."""
+        return SVector2(cos(angle), sin(angle))
     
+    @staticmethod
+    def angled(angle: float, magnitude: float) -> SVector2:
+        """Returns a vector with given magnitude that points in a given angle in radians."""
+        return SVector2(cos(angle)*magnitude, sin(angle)*magnitude)

@@ -23,7 +23,7 @@ class World:
                 subset = self.grid[gx][gy]
                 for obj in subset:
                     sqrdist = (obj.position - pos).sqr_magnitude()
-                    if sqrdist <= (radius+obj.radius) ** 2:
+                    if sqrdist < (radius+obj.radius) ** 2:
                         objSet.append(obj)
         return objSet
     
