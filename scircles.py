@@ -32,11 +32,19 @@ class PhysicWorld(World):
                 if obj.velocity.y < 0:
                     obj.velocity.y *= -1
     
+    def clear_objects(self):
+        objs = list(self.objects)
+        for o in objs:
+            if o.dead:
+                self.objects.remove(o)
+    
     def simulate(self, delta : float):
+        self.add_objects()
         for obj in self.objects:
             obj.sim_move(delta)
         self.sim_wall_bounce()
         self.sim_collisions()
+        self.clear_objects()
                 
 
 class SCircle(WObject):

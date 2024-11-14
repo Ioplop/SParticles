@@ -10,6 +10,7 @@ class World:
         self.scale : float = scale
         self.grid : List[List[List[WObject]]]= [[[] for y in range(ceil(height/scale)+1)] for x in range(ceil(width/scale)+1)]
         self.objects : Set[WObject] = set()
+        self.new_objects : Set[WObject] = set()
     
     def overlap_circle(self, pos : Vector, radius : float) -> List[WObject]:
         objSet : List[WObject] = []
@@ -37,10 +38,17 @@ class World:
     def update_grid(self, obj : WObject, trans : WLTransition):
         for x, y in trans.grid_remove:
             if x >= 0 and x < len(self.grid) and y >= 0 and y < len(self.grid[0]):
-                self.grid[x][y].remove(obj)
+                if obj in self.grid[x][y]:
+                    self.grid[x][y].remove(obj)
         for x, y in trans.grid_add:
             if x >= 0 and x < len(self.grid) and y >= 0 and y < len(self.grid[0]):
-                self.grid[x][y].append(obj)
+                if not (obj in self.grid[x][y]):
+                    self.grid[x][y].append(obj)
+    
+    def add_objects(self):
+        for o in self.new_objects:
+            self.objects.add(o)
+        self.new_objects.clear()
    
 class WObject:
     # An object in worldspace
@@ -50,7 +58,7 @@ class WObject:
         self.radius : float = radius
         self.limits : WLimits = None
         self.dead : bool = False
-        world.objects.add(self)
+        world.new_objects.add(self)
         self.update_grid()
     
     def update_grid(self):
@@ -67,7 +75,7 @@ class WObject:
         
     def remove(self):
         self.world.update_grid(self, WLTransition(self.limits, None))
-        self.world.objects.remove(self)
+        #self.world.objects.remove(self)
         self.dead = True
         
 class WLimits:

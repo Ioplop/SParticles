@@ -11,9 +11,14 @@ from scircles import PhysicWorld as World
 from sparticles import Particle
 
 pygame.init()
+pygame.font.init()
 
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-#screen = pygame.display.set_mode((800, 600))
+# Energy displays
+main_font = pygame.font.SysFont('Comic Sans MS', 30)
+
+
+#screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((800, 600))
 
 W, H = screen.get_size()
 SCALE = 40
@@ -65,18 +70,34 @@ pygame.display.flip()
 t = 0
 delta = 0.05
 running = True
+step_by_step = True
 while running:
+    step = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 running = False
+            if event.key == pygame.K_COMMA:
+                step = True
+            if event.key == pygame.K_SPACE:
+                step_by_step = not step_by_step
+    if step_by_step and not step:
+        continue
     world.simulate(delta)
     #draw_grid()
     screen.fill(background_color)
+    e = 0
     for object in world.objects:
         draw_object(object)
+        e += object.internal_energy
+    for object in world.new_objects:
+        draw_object(object)
+        e += object.internal_energy
+    
+    text_surface = main_font.render(f'Energy: {e}', False, (255, 255, 255))
+    screen.blit(text_surface, (10, 10))
     pygame.display.flip()
     t += delta
     sleep(0.05)
