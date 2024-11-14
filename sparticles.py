@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from random import randint, random
 
 import pandas as pd
@@ -10,9 +10,11 @@ from svector import SVector2 as Vector
 
 part_csv = "particles.csv"
 reac_csv = "reactions.csv"
+spli_csv = "splits.csv"
 
 particle_dict: Dict[str, ParticleBlueprint] = {}
 reaction_dict: Dict[str, str] = {}
+split_dict: Dict[str, Tuple[str, str]]
 
 class Particle(WObject):
     energy = "E"
@@ -120,9 +122,20 @@ def gen_reaction_dict(rlist: str):
         reaction_dict[re_key(re1, re2)] = product
     print(f"Loaded {len(reaction_dict)} reactions...")
 
+def gen_split_dict(slist: str):
+    global split_dict
+    df = pd.read_csv(slist, sep=";")
+    for index, row in df.iterrows():
+        base = row['Base']
+        p1 = row['P1']
+        p2 = row['P2']
+        split_dict[base] = (p1, p2)
+    
+
 def init():
     global part_csv, reac_csv
     gen_particle_dict(part_csv)
     gen_reaction_dict(reac_csv)
+    gen_split_dict(spli_csv)
 
 init()
