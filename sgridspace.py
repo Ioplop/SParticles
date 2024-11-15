@@ -60,7 +60,7 @@ class World:
         self.new_objects.clear()
    
 class WObject:
-    # An object in worldspace
+    """An object in worldspace."""
     def __init__(self, world : World, position: Vector, radius : float):
         self.world : World = world
         self.position : Vector = position
@@ -88,7 +88,7 @@ class WObject:
         self.dead = True
         
 class WLimits:
-    # Defines the grid limits in which an object lives.
+    """Defines the grid limits in which an object lives."""
     def __init__(self, minX, maxX, minY, maxY):
         self.minX = minX
         self.maxX = maxX
@@ -99,7 +99,7 @@ class WLimits:
         return (self.minX <= x <= self.maxX) and self.minY <= y <= self.maxY
     
 class WLTransition:
-    # Defines what parts of the grid must an object be added to or removed from.
+    """Defines what parts of the grid must an object be added to or removed from."""
     def __init__(self, sLimit : WLimits, eLimit : WLimits):
         self.grid_remove : List[Tuple[int, int]] = []
         self.grid_add : List[Tuple[int, int]] = []
