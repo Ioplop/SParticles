@@ -28,7 +28,7 @@ min_vel = 50
 max_vel = 100
 min_size = 5
 max_size = 20
-obj_density = 0.0006
+obj_density = 0.0003
 n_objs = int(W * H * obj_density)
 background_color = [0, 0, 15]
 
@@ -88,16 +88,21 @@ while running:
     world.simulate(delta)
     #draw_grid()
     screen.fill(background_color)
-    e = 0
+    ie = 0
+    te = 0
     for object in world.objects:
         draw_object(object)
-        e += object.internal_energy
+        ie += object.internal_energy
+        te += object.total_energy()
     for object in world.new_objects:
         draw_object(object)
-        e += object.internal_energy
+        ie += object.internal_energy
+        te += object.total_energy()
     
-    text_surface = main_font.render(f'Energy: {e}', False, (255, 255, 255))
-    screen.blit(text_surface, (10, 10))
+    ie_surface = main_font.render(f'IE: {round(ie)}', False, (255, 255, 255))
+    te_surface = main_font.render(f'TE: {round(te)}', False, (255, 255, 255))
+    screen.blit(ie_surface, (10, 10))
+    screen.blit(te_surface, (10, 40))
     pygame.display.flip()
     t += delta
     sleep(0.05)

@@ -14,7 +14,7 @@ spli_csv = "splits.csv"
 
 particle_dict: Dict[str, ParticleBlueprint] = {}
 reaction_dict: Dict[str, str] = {}
-split_dict: Dict[str, Tuple[str, str]]
+split_dict: Dict[str, Tuple[str, str]] = {}
 
 class Particle(WObject):
     energy = "E"
@@ -51,7 +51,8 @@ class Particle(WObject):
         other.remove()
     
     def split(self):
-        self.dead = True
+        pass
+        #self.dead = True
         #TODO: Make particle split
 
     def sim_move(self, delta : float):
@@ -60,7 +61,10 @@ class Particle(WObject):
                 self.split()
         if self.dead:
             return
-        super().move(delta)
+        super().sim_move(delta)
+    
+    def total_energy(self) -> float:
+        return self.velocity.sqr_magnitude() * self.mass + self.internal_energy
 
 class ParticleBlueprint:
     def __init__(self, name: str, symbol: str, mass: int, radius: int, color: List[int], max_energy: float, stability: float):
