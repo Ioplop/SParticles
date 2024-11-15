@@ -13,6 +13,15 @@ class World:
         self.new_objects : Set[WObject] = set()
     
     def overlap_circle(self, pos : Vector, radius : float) -> List[WObject]:
+        """Returns a list with all the objects strictly inside a circle.
+
+        Args:
+            pos (Vector): Position of the center of the circle
+            radius (float): Radius of the circle
+
+        Returns:
+            List[WObject]: List of objects that are at least partly inside the circle (Strictly)
+        """
         objSet : List[WObject] = []
         startGX = max(floor((pos.x-radius)/self.scale), 0)
         endGX = min(floor((pos.x+radius)/self.scale), len(self.grid)-1)

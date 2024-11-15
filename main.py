@@ -17,8 +17,8 @@ pygame.font.init()
 main_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 
-#screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+#screen = pygame.display.set_mode((800, 600))
 
 W, H = screen.get_size()
 SCALE = 40
@@ -68,9 +68,10 @@ screen.fill(background_color)
 pygame.display.flip()
 
 t = 0
-delta = 0.05
+delta = 0.01
 running = True
 step_by_step = True
+continuous_step = False
 while running:
     step = False
     for event in pygame.event.get():
@@ -83,7 +84,12 @@ while running:
                 step = True
             if event.key == pygame.K_SPACE:
                 step_by_step = not step_by_step
-    if step_by_step and not step:
+            if event.key == pygame.K_PERIOD:
+                continuous_step = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_PERIOD:
+                continuous_step = False
+    if step_by_step and not step and not continuous_step:
         continue
     world.simulate(delta)
     #draw_grid()
@@ -105,4 +111,4 @@ while running:
     screen.blit(te_surface, (10, 40))
     pygame.display.flip()
     t += delta
-    sleep(0.05)
+    sleep(delta)
