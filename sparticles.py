@@ -1,9 +1,9 @@
 from __future__ import annotations
 from typing import List, Dict, Tuple
 from random import randint, random
+from math import pi
 
 import pandas as pd
-from pandas import DataFrame as DF
 
 from scircles import SCircle as WObject, PhysicWorld as World
 from svector import SVector2 as Vector
@@ -14,7 +14,7 @@ spli_csv = "splits.csv"
 
 particle_dict: Dict[str, ParticleBlueprint] = {}
 reaction_dict: Dict[str, str] = {}
-split_dict: Dict[str, Tuple[str, str]] = {}
+split_dict: Dict[str, List[Tuple[str, str]]] = {}
 
 class Particle(WObject):
     energy = "E"
@@ -51,7 +51,28 @@ class Particle(WObject):
         other.remove()
     
     def split(self):
-        pass
+        # TODO: Remove return to actually do something
+        return
+        
+        # Get products
+        possible_products = split_dict[self.symbol]
+        if len(possible_products) > 1:
+            products = possible_products[randint(0, len(possible_products))]
+        else:
+            products = possible_products[0]
+        p1 = particle_dict[products[0]]
+        p2 = particle_dict[products[1]]
+        
+        # Find product spawn position
+        angle = random()*2.0*pi
+        p1_off = Vector.angled(angle, p1.radius)
+        p2_off = Vector.angled(-angle, p2.radius)
+        p1pos = self.position + p1_off
+        p2pos = self.position + p2_off
+        
+        # Find product velocity
+        p1_veloff = Vector.angled(angle, )
+        
         #self.dead = True
         #TODO: Make particle split
 
@@ -133,8 +154,9 @@ def gen_split_dict(slist: str):
         base = row['Base']
         p1 = row['P1']
         p2 = row['P2']
-        split_dict[base] = (p1, p2)
-    
+        if not (base in split_dict):
+            split_dict[base] = []
+        split_dict[base].append((p1, p2))
 
 def init():
     global part_csv, reac_csv
