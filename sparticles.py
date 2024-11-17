@@ -18,7 +18,7 @@ split_dict: Dict[str, List[Tuple[str, str]]] = {}
 
 class Particle(WObject):
     energy = "E"
-    def __init__(self, world : World, position : Vector, radius : float, mass : float, name : str, symbol : str, color : List[int], max_energy: float, stability: float):
+    def __init__(self, world : World, position : Vector, radius : float, mass : float, name : str, symbol : str, color : List[int], max_energy: float, stability: float, coll_stability: float):
         WObject.__init__(self, world, position, radius, mass)
         self.name = name
         self.color = color
@@ -26,6 +26,7 @@ class Particle(WObject):
         self.internal_energy = 0.0
         self.max_energy = max_energy
         self.stability = stability
+        self.coll_stability = coll_stability
         
     def collide(self, other : Particle):
         if self.dead or other.dead:
@@ -37,6 +38,9 @@ class Particle(WObject):
             self.react(other, reaction)
         else:
             super().collide(other)
+            if other.symbol != Particle.energy and other.mass < self.mass:
+                if random() > self.coll_stability:
+                    self.split()
     
     def react(self, other: Particle, result: str):
         energy = self.mass * self.velocity.sqr_magnitude() / 2.0 + other.mass * other.velocity.sqr_magnitude() / 2.0 + self.internal_energy + other.internal_energy
@@ -91,7 +95,7 @@ class Particle(WObject):
         return self.velocity.sqr_magnitude() * self.mass / 2.0 + self.internal_energy
 
 class ParticleBlueprint:
-    def __init__(self, name: str, symbol: str, mass: int, radius: int, color: List[int], max_energy: float, stability: float):
+    def __init__(self, name: str, symbol: str, mass: int, radius: int, color: List[int], max_energy: float, stability: float, coll_stability: float):
         self.name: str = name
         self.symbol: str  = symbol
         self.mass: int = mass
@@ -99,9 +103,10 @@ class ParticleBlueprint:
         self.color: List[int] = color
         self.max_energy: float = max_energy
         self.stability: float = stability
+        self.coll_stability: float = coll_stability
     
     def gen(self, world: World, position: Vector) -> Particle:
-        return Particle(world, position, self.radius, self.mass, self.name, self.symbol, self.color, self.max_energy, self.stability)
+        return Particle(world, position, self.radius, self.mass, self.name, self.symbol, self.color, self.max_energy, self.stability, self.coll_stability)
 
 def create_particle(symbol: str, world: World, position: Vector) -> Particle:
     return particle_dict[symbol].gen(world, position)
@@ -121,7 +126,8 @@ def read_particle(row: pd.Series) -> ParticleBlueprint:
     color = [int(row['R']), int(row['G']), int(row['B'])]
     max_e = float(row['Max_E'])
     stability = float(row['Stability'])
-    return ParticleBlueprint(name, symbol, mass, radius, color, max_e, stability)
+    coll_stability = float(row['CollisionStability'])
+    return ParticleBlueprint(name, symbol, mass, radius, color, max_e, stability, coll_stability)
 
 def gen_particle_dict(plist: str):
     global particle_dict
