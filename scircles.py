@@ -3,7 +3,6 @@ from svector import SVector2 as Vector
 from sgridspace import World, WObject
 from typing import Set, List
 
-
 class PhysicWorld(World):
     def __init__(self, width: float, height: float, scale: float):
         World.__init__(self, width, height, scale)

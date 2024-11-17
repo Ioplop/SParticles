@@ -39,10 +39,10 @@ class Particle(WObject):
             super().collide(other)
     
     def react(self, other: Particle, result: str):
-        energy = self.mass * self.velocity.sqr_magnitude() + other.mass * other.velocity.sqr_magnitude() + self.internal_energy + other.internal_energy
+        energy = self.mass * self.velocity.sqr_magnitude() / 2.0 + other.mass * other.velocity.sqr_magnitude() / 2.0 + self.internal_energy + other.internal_energy
         new_vel = (self.mass * self.velocity + other.mass * other.velocity)/(self.mass + other.mass)
         new_pos = (self.mass * self.position + other.mass * other.position)/(self.mass + other.mass)
-        new_kenergy = new_vel.sqr_magnitude() * (self.mass + other.mass)
+        new_kenergy = new_vel.sqr_magnitude() * (self.mass + other.mass) / 2.0
         injected_energy = energy - new_kenergy
         product = create_particle(result, self.world, new_pos)
         product.velocity = new_vel
@@ -51,13 +51,10 @@ class Particle(WObject):
         other.remove()
     
     def split(self):
-        # TODO: Remove return to actually do something
-        return
-        
         # Get products
         possible_products = split_dict[self.symbol]
         if len(possible_products) > 1:
-            products = possible_products[randint(0, len(possible_products))]
+            products = possible_products[randint(0, len(possible_products)-1)]
         else:
             products = possible_products[0]
         p1 = particle_dict[products[0]]
@@ -66,15 +63,21 @@ class Particle(WObject):
         # Find product spawn position
         angle = random()*2.0*pi
         p1_off = Vector.angled(angle, p1.radius)
-        p2_off = Vector.angled(-angle, p2.radius)
-        p1pos = self.position + p1_off
-        p2pos = self.position + p2_off
+        p2_off = Vector.angled(angle + pi, p2.radius)
+        p1_pos = self.position + p1_off
+        p2_pos = self.position + p2_off
         
         # Find product velocity
-        p1_veloff = Vector.angled(angle, )
-        
-        #self.dead = True
-        #TODO: Make particle split
+        base_term = (2*self.internal_energy)/(p1.mass + p2.mass)
+        p1_speed = (base_term * p2.mass / p1.mass)**0.5
+        p2_speed = (base_term * p1.mass / p2.mass)**0.5
+        p1_vel = Vector.angled(angle, p1_speed) + self.velocity
+        p2_vel = Vector.angled(angle + pi, p2_speed) + self.velocity
+        wp1 = p1.gen(self.world, p1_pos)
+        wp2 = p2.gen(self.world, p2_pos)
+        wp1.velocity = p1_vel
+        wp2.velocity = p2_vel
+        self.remove()
 
     def sim_move(self, delta : float):
         if self.internal_energy > self.max_energy:
@@ -85,7 +88,7 @@ class Particle(WObject):
         super().sim_move(delta)
     
     def total_energy(self) -> float:
-        return self.velocity.sqr_magnitude() * self.mass + self.internal_energy
+        return self.velocity.sqr_magnitude() * self.mass / 2.0 + self.internal_energy
 
 class ParticleBlueprint:
     def __init__(self, name: str, symbol: str, mass: int, radius: int, color: List[int], max_energy: float, stability: float):
