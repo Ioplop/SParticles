@@ -67,7 +67,9 @@ To start the simulation, you have to activate your venv and run the main.py scri
 
 # Controls
 
-While the simulation is running, you can press ESC to quit the simulation.  
+While the simulation is running, you can press ESC to quit the simulation.
+
+Use "," (Comma) to fast forward. This will run the simulation as fast as your pc allows.
 
 Press SPACE BAR to pause the simulation  
 While paused:  
