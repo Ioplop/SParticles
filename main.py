@@ -73,6 +73,7 @@ delta = 0.01
 running = True
 step_by_step = True
 continuous_step = False
+fast_forward = False
 while running:
     step = False
     for event in pygame.event.get():
@@ -83,6 +84,7 @@ while running:
                 running = False
             if event.key == pygame.K_COMMA:
                 step = True
+                fast_forward = True
             if event.key == pygame.K_SPACE:
                 step_by_step = not step_by_step
             if event.key == pygame.K_PERIOD:
@@ -90,6 +92,8 @@ while running:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_PERIOD:
                 continuous_step = False
+            if event.key == pygame.K_COMMA:
+                fast_forward = False
     if step_by_step and not step and not continuous_step:
         continue
     world.simulate(delta)
@@ -112,4 +116,5 @@ while running:
     screen.blit(te_surface, (10, 40))
     pygame.display.flip()
     t += delta
-    sleep(delta)
+    if not fast_forward:
+        sleep(delta)
