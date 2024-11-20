@@ -1,6 +1,7 @@
 from random import random, randint
 from math import sin, cos, pi
 from time import sleep
+from colorsys import rgb_to_hsv, hsv_to_rgb
 
 import pygame
 from pygame.locals import Rect
@@ -15,6 +16,7 @@ pygame.font.init()
 
 # Energy displays
 main_font = pygame.font.SysFont('Comic Sans MS', 30)
+symbol_font = pygame.font.SysFont('Arial', 15)
 
 
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -60,10 +62,19 @@ def draw_grid():
             pygame.draw.rect(screen, color, Rect(sx, sy, ex-sx, ey-sy))
 
 def draw_object(particle : Particle):
-    global screen, W
+    global screen, W, H, symbol_font
     mopos = particle.position.as_list()
     mopos[1] = H - mopos[1]
     pygame.draw.circle(screen, particle.color, mopos, particle.radius)
+    # draw text
+    h, s, v = rgb_to_hsv(particle.color[0], particle.color[1], particle.color[2])
+    nh = (h + 0.5) % 1
+    ns = s
+    nv = 100
+    brightness = sum(particle.color)
+    text = symbol_font.render(particle.symbol, True, hsv_to_rgb(nh, ns, nv))
+    text_rect = text.get_rect(center=(particle.position.x, H - particle.position.y))
+    screen.blit(text, text_rect)
 
 screen.fill(background_color)
 pygame.display.flip()
