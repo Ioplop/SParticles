@@ -15,8 +15,8 @@ pygame.init()
 pygame.font.init()
 
 # Energy displays
-main_font = pygame.font.SysFont('Comic Sans MS', 30)
-symbol_font = pygame.font.SysFont('Arial', 15)
+main_font = pygame.font.SysFont(None, 30)
+symbol_font = pygame.font.SysFont(None, 15)
 
 
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
