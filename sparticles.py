@@ -2,8 +2,7 @@ from __future__ import annotations
 from typing import List, Dict, Tuple
 from random import randint, random
 from math import pi
-
-import pandas as pd
+from csv import DictReader
 
 from scircles import SCircle as WObject, PhysicWorld as World
 from svector import SVector2 as Vector
@@ -118,7 +117,7 @@ def random_symbol(exclude_energy: bool = True):
         s = symbols[randint(0, len(symbols) - 1)]
     return s
 
-def read_particle(row: pd.Series) -> ParticleBlueprint:
+def read_particle(row: Dict) -> ParticleBlueprint:
     name = row['Name']
     symbol = row['Symbol']
     mass = int(row['Mass'])
@@ -131,10 +130,12 @@ def read_particle(row: pd.Series) -> ParticleBlueprint:
 
 def gen_particle_dict(plist: str):
     global particle_dict
-    df = pd.read_csv(plist, header=0, sep=";")
-    for index, row in df.iterrows():
-        pb = read_particle(row)
-        particle_dict[pb.symbol] = pb
+    with open(plist, 'r') as file:
+        csv_reader = DictReader(file, delimiter=';')
+        data = [row for row in csv_reader]
+        for row in data:
+            pb = read_particle(row)
+            particle_dict[pb.symbol] = pb
     print(f"Loaded {len(particle_dict)} particles...")
 
 def re_key(re1: str, re2: str) -> str:
@@ -148,24 +149,29 @@ def get_reaction(re1: str, re2: str)->str:
 
 def gen_reaction_dict(rlist: str):
     global reaction_dict
-    df = pd.read_csv(rlist, sep=";")
-    for index, row in df.iterrows():
-        re1 = row['re1']
-        re2 = row['re2']
-        product = row['product']
-        reaction_dict[re_key(re1, re2)] = product
+    with open(rlist, mode='r') as file:
+        csv_reader = DictReader(file, delimiter=';')
+        data = [row for row in csv_reader]
+        for row in data:
+            re1 = row['re1']
+            re2 = row['re2']
+            product = row['product']
+            reaction_dict[re_key(re1, re2)] = product
     print(f"Loaded {len(reaction_dict)} reactions...")
 
 def gen_split_dict(slist: str):
     global split_dict
-    df = pd.read_csv(slist, sep=";")
-    for index, row in df.iterrows():
-        base = row['Base']
-        p1 = row['P1']
-        p2 = row['P2']
-        if not (base in split_dict):
-            split_dict[base] = []
-        split_dict[base].append((p1, p2))
+    
+    with open(slist, mode='r') as file:
+        csv_reader = DictReader(file, delimiter=';')
+        data = [row for row in csv_reader]
+        for row in data:
+            base = row['Base']
+            p1 = row['P1']
+            p2 = row['P2']
+            if not (base in split_dict):
+                split_dict[base] = []
+            split_dict[base].append((p1, p2))
 
 def init():
     global part_csv, reac_csv
