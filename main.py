@@ -28,13 +28,11 @@ world = World(W, H, SCALE)
 
 min_vel = 50
 max_vel = 100
-min_size = 5
-max_size = 20
-obj_density = 0.0003
+volume_density = 0.0003
 background_color = [0, 0, 15]
 
 #n_objs = 2
-n_objs = int(W * H * obj_density)
+n_objs = int(W * H * volume_density)
 for i in range(n_objs):
     angle = random()*pi*2.0
     speed = min_vel + random() * (max_vel - min_vel)
